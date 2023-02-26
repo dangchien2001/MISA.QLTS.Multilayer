@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,15 @@ namespace MISA.QLTS.Common.Entities
         /// <summary>
         /// Mã tài sản
         /// </summary>
+        [Required(ErrorMessage = "Mã tài sản không được bỏ trống")]
+        [StringLength(4, ErrorMessage = "Mã tài sản không vượt quá 20 ký tự")]
         public string asset_code { get; set; }
 
         /// <summary>
         /// Tên tài sản
         /// </summary>
+        [Required(ErrorMessage = "Tên tài sản không được bỏ trống")]
+        [StringLength(3, ErrorMessage = "Tên tài sản không vượt quá 20 ký tự")]
         public string asset_name { get; set; }
 
         /// <summary>
@@ -31,6 +36,7 @@ namespace MISA.QLTS.Common.Entities
         /// <summary>
         /// Mã đơn vị
         /// </summary>
+        [Required(ErrorMessage = "Mã đơn vị không được bỏ trống")]
         public string organization_code { get; set; }
 
         /// <summary>

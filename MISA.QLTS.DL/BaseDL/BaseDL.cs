@@ -22,7 +22,21 @@ namespace MISA.QLTS.DL.BaseDL
         /// </returns>
         public int DeleteRecord(Guid recordId)
         {
-            throw new NotImplementedException();
+            //Chuẩn bị tên stored procedure
+            string storedProcedureName = string.Format(ProcedureName.Delete, typeof(T).Name);
+
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parameters = new DynamicParameters();
+            parameters.Add("p_" + typeof(T).Name + "Id", recordId);
+
+            // Khởi tạo kết nối tới Database
+            int numberOfAffectedRows;
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                // Thực hiện gọi vào Database để chạy stored procedure
+                numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+            }
+            return numberOfAffectedRows;
         }
 
         /// <summary>
@@ -53,7 +67,21 @@ namespace MISA.QLTS.DL.BaseDL
         /// <returns></returns>
         public List<T> GetRecordById(Guid recordId)
         {
-            throw new NotImplementedException();
+            //Chuẩn bị tên stored procedure
+            string storedProcedureName = string.Format(ProcedureName.Get, typeof(T).Name, "ById");
+
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parameters = new DynamicParameters();
+            parameters.Add("p_" + typeof(T).Name + "Id", recordId);
+
+            // Khởi tạo kết nối tới Database
+            dynamic record;
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                var result = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+                record = result.Read<T>().ToList();
+            }
+            return record;
         }
 
         /// <summary>
@@ -66,7 +94,24 @@ namespace MISA.QLTS.DL.BaseDL
         /// </returns>
         public int InsertRecord(T record)
         {
-            throw new NotImplementedException();
+            //Chuẩn bị tên stored procedure
+            string storedProcedureName = string.Format(ProcedureName.Insert, typeof(T).Name);
+            //Chuẩn bị tham số đầu vào cho store
+            var parameters = new DynamicParameters();
+            foreach (var prop in record.GetType().GetProperties())
+            {
+                parameters.Add("p_" + prop.Name, prop.GetValue(record, null));
+            }
+
+            //Khởi tạo kết nối tới DB
+            int numberOfAffectedRows;
+            using (var mysqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                //Gọi vào DB
+                numberOfAffectedRows = mysqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            }
+
+            return numberOfAffectedRows;
         }
 
         /// <summary>
@@ -80,7 +125,26 @@ namespace MISA.QLTS.DL.BaseDL
         /// </returns>
         public int UpdateRecord(Guid recordId, T record)
         {
-            throw new NotImplementedException();
+            // procedurename
+            string storedProcedureName = string.Format(ProcedureName.Update, typeof(T).Name);
+
+            var parameters = new DynamicParameters();
+
+            //Chuẩn bị tham số đầu vào
+            foreach (var prop in record.GetType().GetProperties())
+            {
+                parameters.Add("p_" + prop.Name, prop.GetValue(record, null));
+            }
+            // Khởi tạo kết nối DB
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                // Tìm Employee theo id xem có tồn tại
+
+                // Gọi proc
+                var numberOfRowsAffect = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return numberOfRowsAffect;
+
+            }
         }
     }
 }

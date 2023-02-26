@@ -1,3 +1,9 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using MISA.QLTS.BL.AssetBL;
+using MISA.QLTS.BL.BaseBL;
+using MISA.QLTS.DL.AssetDL;
+using MISA.QLTS.DL.BaseDL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,6 +18,19 @@ builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
+
+//Tắt validate mặc định
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.Services.AddScoped(typeof(IBaseBL<>), typeof(BaseBL<>));
+builder.Services.AddScoped(typeof(IBaseDL<>), typeof(BaseDL<>));
+
+builder.Services.AddScoped<IAssetBL, AssetBL>();
+builder.Services.AddScoped<IAssetDL, AssetDL>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

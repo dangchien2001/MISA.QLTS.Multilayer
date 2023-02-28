@@ -9,7 +9,7 @@ namespace MISA.QLTS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AssetsController : BasesController<asset>
+    public class AssetsController : BasesController<Asset>
     {
         #region Field
 
@@ -56,14 +56,14 @@ namespace MISA.QLTS.API.Controllers
         /// <returns></returns>
         [HttpGet("filter")]
         public IActionResult GetAssetsByFilter(
-            [FromQuery] string? employeeFilter,
+            [FromQuery] string? assetFilter,
             [FromQuery] int pageSize = 10,
             [FromQuery] int pageNumber = 1)
         {
             try
             {
                 var result = new PagingResult();
-                result = _assetBL.GetAssetsByFilter(employeeFilter, pageSize, pageNumber);
+                result = _assetBL.GetAssetsByFilter(assetFilter, pageSize, pageNumber);
                 return StatusCode(StatusCodes.Status200OK, result);
             }
             catch (Exception ex)

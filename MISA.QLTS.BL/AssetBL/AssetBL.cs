@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MISA.QLTS.BL.AssetBL
 {
-    public class AssetBL : BaseBL<asset>, IAssetBL
+    public class AssetBL : BaseBL<Asset>, IAssetBL
     {
         #region Field
 
@@ -44,14 +44,14 @@ namespace MISA.QLTS.BL.AssetBL
         /// </summary>
         /// <param name="asset"></param>
         /// <returns></returns>
-        public bool DuplicateCode(asset asset)
+        public bool DuplicateCode(Asset Asset)
         {
-            List<asset> result = new List<asset>();
-            result = _assetDL.DuplicateCode(asset);
+            List<Asset> result = new List<Asset>();
+            result = _assetDL.DuplicateCode(Asset);
             bool isCheck = false;
-            foreach (asset ass in result)
+            foreach (Asset ass in result)
             {
-                if (ass.asset_id == asset.asset_id)
+                if (ass.AssetId == Asset.AssetId)
                 {
                     isCheck = false;
                 }
@@ -72,17 +72,7 @@ namespace MISA.QLTS.BL.AssetBL
         /// <returns></returns>
         public PagingResult GetAssetsByFilter([FromQuery] string? assetFilter, [FromQuery] int pageSize = 10, [FromQuery] int pageNumber = 1)
         {
-            var result = new PagingResult();
-            result = _assetDL.GetAssetsByFilter(assetFilter, pageSize, pageNumber);
-
-            if (result.TotalRecord % pageSize == 0)
-            {
-                result.TotalPage = result.TotalRecord / pageSize;
-            }
-            else
-            {
-                result.TotalPage = (result.TotalRecord / pageSize) + 1;
-            }
+            var result = _assetDL.GetAssetsByFilter(assetFilter, pageSize, pageNumber);
             return result;
         }
 

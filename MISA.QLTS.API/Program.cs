@@ -3,10 +3,20 @@ using MISA.QLTS.BL.AssetBL;
 using MISA.QLTS.BL.BaseBL;
 using MISA.QLTS.DL.AssetDL;
 using MISA.QLTS.DL.BaseDL;
+using MISA.QLTS.DL.Datacontext;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DataBaseContext.connectionString = builder.Configuration.GetConnectionString("MySql");
+
+
 // Add services to the container.
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        }
+        );
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

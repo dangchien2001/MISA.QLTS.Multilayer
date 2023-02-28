@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MISA.QLTS.BL.AssetBL
 {
-    public interface IAssetBL : IBaseBL<asset>
+    public interface IAssetBL : IBaseBL<Asset>
     {
         /// <summary>
         /// API lấy danh sách nhân viên lọc theo trang
@@ -41,6 +41,6 @@ namespace MISA.QLTS.BL.AssetBL
         /// </summary>
         /// <param name="asset"></param>
         /// <returns></returns>
-        bool DuplicateCode(asset asset);
+        bool DuplicateCode(Asset asset);
     }
 }

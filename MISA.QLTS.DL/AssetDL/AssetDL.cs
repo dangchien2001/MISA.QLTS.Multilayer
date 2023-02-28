@@ -8,13 +8,14 @@ using MISA.QLTS.DL.Datacontext;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MISA.QLTS.DL.AssetDL
 {
-    public class AssetDL : BaseDL<asset>, IAssetDL
+    public class AssetDL : BaseDL<Asset>, IAssetDL
     {
         /// <summary>
         /// Hàm xóa nhiều bản ghi
@@ -55,17 +56,17 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="asset"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public List<asset> DuplicateCode(asset asset)
+        public List<Asset> DuplicateCode(Asset Asset)
         {
             var storedProcedureName = "Proc_Asset_Duplicate_Code";
             var parameters = new DynamicParameters();
-            parameters.Add("p_AssetCode", asset.asset_code);
-            parameters.Add("p_AssetId", asset.asset_id);
+            parameters.Add("p_AssetCode", Asset.AssetCode);
+            parameters.Add("p_AssetId", Asset.AssetId);
             dynamic result;
             using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
             {
                 var multy = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-                result = multy.Read<asset>().ToList();
+                result = multy.Read<Asset>().ToList();
             }
             return result;
         }
@@ -82,30 +83,28 @@ namespace MISA.QLTS.DL.AssetDL
             [FromQuery] int pageSize = 10, 
             [FromQuery] int pageNumber = 1)
         {
-            // Khởi tạo kết quả trả về
-            var result = new PagingResult();
+            string storedProcedureName = string.Format(ProcedureName.Filter, typeof(Asset).Name);
 
-            // Chuẩn bị tên stored proc
-            string storedProcedureName = string.Format(ProcedureName.Filter, typeof(asset).Name);
-
-            // Chuẩn bị tham số đầu vào cho proc
             var parameters = new DynamicParameters();
-            parameters.Add("p_PageNumber", pageNumber);
             parameters.Add("p_PageSize", pageSize);
+            parameters.Add("p_PageNumber", pageNumber);
             parameters.Add("p_AssetFilter", assetFilter);
 
-            // Khởi tạo kết nối db
-            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
+            mySqlConnection.Open();
+
+            var getAssetFilter = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+            //int totalRecords = getAssetFilter.Read<int>().Single();
+            var AssetFilters = getAssetFilter.Read<Asset>().ToList();
+            //double totalPage = Convert.ToDouble(totalRecords) / pageSize;
+            return new PagingResult
             {
-                // Gọi proc
-                var multy = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-                // lấy kết quả gán cho result
-                result.TotalRecord = multy.Read<int>().Single();
-                result.Data = multy.Read<asset>().ToList();
-                result.CurrentPageRecords = result.Data.Count;
-                result.CurrentPage = pageNumber;
-            }
-            return result;
+                CurrentPage = pageNumber,
+                CurrentPageRecords = pageSize,
+                //TotalPage = Convert.ToInt32(Math.Ceiling(totalPage)),
+                //TotalRecord = totalRecords,
+                Data = AssetFilters
+            };
         }
 
         /// <summary>

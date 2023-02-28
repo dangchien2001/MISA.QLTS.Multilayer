@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MISA.QLTS.Common.Attributes.QLTSAttributes;
 
 namespace MISA.QLTS.DL.BaseDL
 {
@@ -94,21 +95,33 @@ namespace MISA.QLTS.DL.BaseDL
         /// </returns>
         public int InsertRecord(T record)
         {
-            //Chuẩn bị tên stored procedure
             string storedProcedureName = string.Format(ProcedureName.Insert, typeof(T).Name);
-            //Chuẩn bị tham số đầu vào cho store
             var parameters = new DynamicParameters();
-            foreach (var prop in record.GetType().GetProperties())
+            var newRecordID = Guid.NewGuid();
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
             {
-                parameters.Add("p_" + prop.Name, prop.GetValue(record, null));
+                string propertyName = property.Name;
+                object propertyValue;
+
+                var primaryKeyAttribute = (PrimaryKeyAttribute?)Attribute.GetCustomAttribute(property, typeof(PrimaryKeyAttribute));
+
+                if (primaryKeyAttribute != null)
+                {
+                    propertyValue = newRecordID;
+                }
+                else
+                {
+                    propertyValue = property.GetValue(record, null);
+                }
+                parameters.Add($"p_{propertyName}", propertyValue);
             }
 
-            //Khởi tạo kết nối tới DB
             int numberOfAffectedRows;
-            using (var mysqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
             {
-                //Gọi vào DB
-                numberOfAffectedRows = mysqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                mySqlConnection.Open();
+                numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
             }
 
             return numberOfAffectedRows;
@@ -125,26 +138,35 @@ namespace MISA.QLTS.DL.BaseDL
         /// </returns>
         public int UpdateRecord(Guid recordId, T record)
         {
-            // procedurename
             string storedProcedureName = string.Format(ProcedureName.Update, typeof(T).Name);
-
             var parameters = new DynamicParameters();
-
-            //Chuẩn bị tham số đầu vào
-            foreach (var prop in record.GetType().GetProperties())
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
             {
-                parameters.Add("p_" + prop.Name, prop.GetValue(record, null));
+                string propertyName = property.Name;
+                object propertyValue;
+
+                var primaryKeyAttribute = (PrimaryKeyAttribute?)Attribute.GetCustomAttribute(property, typeof(PrimaryKeyAttribute));
+
+                if (primaryKeyAttribute != null)
+                {
+                    propertyValue = recordId;
+                }
+                else
+                {
+                    propertyValue = property.GetValue(record, null);
+                }
+                parameters.Add($"p_{propertyName}", propertyValue);
             }
-            // Khởi tạo kết nối DB
+
+            int numberOfAffectedRows;
             using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
             {
-                // Tìm Employee theo id xem có tồn tại
-
-                // Gọi proc
-                var numberOfRowsAffect = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-                return numberOfRowsAffect;
-
+                mySqlConnection.Open();
+                numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
             }
+
+            return numberOfAffectedRows;
         }
     }
 }

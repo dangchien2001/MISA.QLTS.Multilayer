@@ -31,6 +31,6 @@ namespace MISA.QLTS.Common.Entities.DTO
         /// <summary>
         /// Danh sách dữ liệu
         /// </summary>
-        public List<asset> Data { get; set; }
+        public List<Asset> Data { get; set; }
     }
 }

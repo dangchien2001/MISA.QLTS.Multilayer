@@ -43,6 +43,10 @@ namespace MISA.QLTS.BL.BaseBL
             return result;
         }
 
+        /// <summary>
+        /// Lấy danh sách
+        /// </summary>
+        /// <returns></returns>
         public List<T> GetAllRecord()
         {
             List<T> listRecords;

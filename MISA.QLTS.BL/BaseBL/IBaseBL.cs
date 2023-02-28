@@ -34,16 +34,12 @@ namespace MISA.QLTS.BL.BaseBL
         /// <returns>Số bản ghi bị ảnh hưởng</returns>
         ServiceResult InsertRecord(T record);
 
-        // <summary>
+        /// <summary>
         /// Sửa thông tin bản ghi
         /// </summary>
-        /// <param name="recordId">ID bản ghi muốn sửa</param>
-        /// <param name="record">bản ghi muốn sửa</param>
-        /// <returns>
-        /// 1: Nếu insert thành công
-        /// 0: Nếu insert thất bại
-        /// </returns>
-        /// Created by: NVTan (09/02/2023)
+        /// <param name="recordId"></param>
+        /// <param name="record"></param>
+        /// <returns></returns>
         ServiceResult UpdateRecord(Guid recordId, T record);
 
         /// <summary>

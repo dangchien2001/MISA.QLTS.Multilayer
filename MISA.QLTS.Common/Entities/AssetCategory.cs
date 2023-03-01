@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace MISA.QLTS.Common.Entities
 {
-    public class Department
+    public class AssetCategory
     {
         /// <summary>
-        /// Id phòng ban
+        /// Id loại tài sản
         /// </summary>
-        public Guid DepartmentId { get; set; }
+        public Guid AssetCategoryId { get; set; }
 
         /// <summary>
-        /// Mã phòng ban
+        /// Mã loại tài sản
         /// </summary>
-        public string DepartmentCode { get; set; }
+        public string AssetCategoryCode { get; set; }
 
         /// <summary>
-        /// Tên phòng ban
+        /// Tên loại tài sản
         /// </summary>
-        public string DepartmentName { get;set; }
+        public string AssetCategoryName { get; set; }
 
         /// <summary>
         /// Người tạo
@@ -41,6 +41,6 @@ namespace MISA.QLTS.Common.Entities
         /// <summary>
         /// Ngày sửa
         /// </summary>
-        public DateTime ModifiedDate { get; set; }
+        public string ModifiedDate { get; set; }
     }
 }

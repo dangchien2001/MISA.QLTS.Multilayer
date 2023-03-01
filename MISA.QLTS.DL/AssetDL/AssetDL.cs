@@ -78,10 +78,7 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <returns></returns>
-        public PagingResult GetAssetsByFilter(
-            [FromQuery] string? assetFilter, 
-            [FromQuery] int pageSize = 10, 
-            [FromQuery] int pageNumber = 1)
+        public PagingResult GetAssetsByFilter([FromQuery] string? assetFilter, [FromQuery] int pageSize = 10, [FromQuery] int pageNumber = 1)
         {
             string storedProcedureName = string.Format(ProcedureName.Filter, typeof(Asset).Name);
 

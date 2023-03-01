@@ -19,10 +19,7 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <returns></returns>
-        PagingResult GetAssetsByFilter(
-            [FromQuery] string? assetFilter,
-            [FromQuery] int pageSize = 10,
-            [FromQuery] int pageNumber = 1);
+        PagingResult GetAssetsByFilter([FromQuery] string? assetFilter,[FromQuery] int pageSize = 10,[FromQuery] int pageNumber = 1);
 
         /// <summary>
         /// Lấy mã tài sản mới

@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MISA.QLTS.BL.AssetBL;
+using MISA.QLTS.BL.AssetCategoryBL;
 using MISA.QLTS.BL.BaseBL;
+using MISA.QLTS.BL.DepartmentBL;
+using MISA.QLTS.DL.AssetCategoryDL;
 using MISA.QLTS.DL.AssetDL;
 using MISA.QLTS.DL.BaseDL;
 using MISA.QLTS.DL.Datacontext;
+using MISA.QLTS.DL.DepartmentDL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +44,12 @@ builder.Services.AddScoped(typeof(IBaseDL<>), typeof(BaseDL<>));
 
 builder.Services.AddScoped<IAssetBL, AssetBL>();
 builder.Services.AddScoped<IAssetDL, AssetDL>();
+
+builder.Services.AddScoped<IDepartmentBL, DepartmentBL>();
+builder.Services.AddScoped<IDepartmentDL, DepartmentDL>();
+
+builder.Services.AddScoped<IAssetCategoryBL, AssetCategoryBL>();
+builder.Services.AddScoped<IAssetCategoryDL, AssetCategoryDL>();
 
 var app = builder.Build();
 

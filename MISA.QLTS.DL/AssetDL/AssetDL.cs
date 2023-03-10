@@ -26,7 +26,7 @@ namespace MISA.QLTS.DL.AssetDL
         public int DeleteAssetMore(List<Guid> assetIds)
         {
             // Khởi tạo câu lệnh sql
-            var sql = "DELETE FROM asset WHERE asset_id IN ('{0}')";
+            var sql = "DELETE FROM asset WHERE assetId IN ('{0}')";
             var result = 0;
             using (var mySqlConnection = new MySqlConnection(DataBaseContext.connectionString))
             {
@@ -110,7 +110,7 @@ namespace MISA.QLTS.DL.AssetDL
         /// <returns></returns>
         public int GetMaxAssetCode()
         {
-            var procedureName = "Proc_Asset_MaxCode";
+            var procedureName = "Proc_Asset_GetMaxCode";
             var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
             var multy = mySqlConnection.QueryMultiple(procedureName, commandType: System.Data.CommandType.StoredProcedure);
             int numCode = multy.Read<int>().Single();

@@ -118,7 +118,7 @@ namespace MISA.QLTS.API.Controllers
                 //Xử lý kết quả trả về
                 if (result.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status201Created);
+                    return StatusCode(StatusCodes.Status201Created, 1);
                 }
                 else if (!result.IsSuccess && result.ErrorCode == Common.Enums.ErrorCode.IsValidData)
                 {

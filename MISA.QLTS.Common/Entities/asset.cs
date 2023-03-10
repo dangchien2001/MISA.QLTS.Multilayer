@@ -11,6 +11,11 @@ namespace MISA.QLTS.Common.Entities
     public class Asset
     {
         /// <summary>
+        /// Số thứ tự
+        /// </summary>
+        public int RowIndex { get; set; }
+
+        /// <summary>
         /// Id tài sản
         /// </summary>
         [PrimaryKey]
@@ -38,6 +43,11 @@ namespace MISA.QLTS.Common.Entities
         public Guid AssetCategoryId { get; set; }
 
         /// <summary>
+        /// Mã loại tài sản
+        /// </summary>
+        public string AssetCategoryCode { get; set; }
+
+        /// <summary>
         /// Tên loại tài sản
         /// </summary>
         public string AssetCategoryName { get; set; }
@@ -48,6 +58,11 @@ namespace MISA.QLTS.Common.Entities
         /// 
         [ForeignKey("Mã phòng ban không được để trống")]
         public Guid DepartmentId { get; set; }
+
+        /// <summary>
+        /// Mã phòng ban
+        /// </summary>
+        public string DepartmentCode { get; set; }
 
         /// <summary>
         /// Tên phòng ban
